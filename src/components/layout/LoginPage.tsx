@@ -5,9 +5,27 @@ import { Label } from "@/components/common/ui/label";
 import { Checkbox } from "@/components/common/ui/checkbox";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async ({ post }: { post: string }) => {
+    const res = await post("/login", { email, password });
+
+    const token = "abc-124-456-token-jwt";
+    const dummyUser = {
+      id: 1,
+      name: "admin MYPOS",
+      email: "admin@mypos.com",
+      role: "admin",
+    };
+    login(token, dummyUser);
+  };
 
   return (
     <div className="w-full min-h-screen lg:grid lg:grid-cols-[1.3fr_1fr] overflow-hidden font-sans">
@@ -102,9 +120,8 @@ const LoginPage = () => {
                 <Mail className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <Input
                   id="email"
-                  placeholder="test@sabercli.co"
+                  placeholder="your@email.com"
                   type="email"
-                  // Padding kiri diperbesar untuk icon
                   className="pl-11 h-12 bg-slate-50 border-slate-200 focus-visible:ring-primary focus-visible:ring-2 rounded-xl"
                 />
               </div>
@@ -154,7 +171,10 @@ const LoginPage = () => {
             </div>
 
             {/* Main Action Button */}
-            <Button className="w-full h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all">
+            <Button
+              onClick={handleLogin}
+              className="w-full h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all"
+            >
               Sign In
             </Button>
 
