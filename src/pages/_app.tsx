@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { AuthProvider } from "@/context/authContext"; // 1. Import ini
+import { AuthProvider } from "@/context/authContext";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],

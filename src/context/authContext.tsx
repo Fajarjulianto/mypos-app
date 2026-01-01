@@ -1,13 +1,18 @@
-import React, { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, useEffect, ReactNode } from "react";
 import { useRouter } from "next/router";
-import { User, AuthContextType } from "@/types/auth";
+import {
+  User,
+  AuthContextType,
+  LoginPayload,
+  RegisterPayload,
+} from "@/types/auth";
+import { authService } from "@/services/authServices";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  // Default true agar tidak ada "flash" konten saat reload
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
 
@@ -28,14 +33,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // 2. Fungsi Login
-  const login = (newToken: string, newUser: User) => {
-    localStorage.setItem("token", newToken);
-    localStorage.setItem("user", JSON.stringify(newUser));
+  const login = async (payload: LoginPayload) => {
+    try {
+      const data = await authService.login(payload);
 
-    setToken(newToken);
-    setUser(newUser);
+      // Simpan sesi
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+      localStorage.setItem("user", JSON.stringify(data.user));
+      setToken(data.token);
+      setUser(data.user);
 
-    router.push("/dashboard"); // Redirect otomatis ke dashboard
+      router.push("/dashboard");
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const register = async (payload: RegisterPayload) => {
+    try {
+      const data = await authService.register(payload);
+
+      // Simpan sesi (langsung login setelah daftar)
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+      localStorage.setItem("user", JSON.stringify(data.user));
+      setToken(data.token);
+      setUser(data.user);
+
+      router.push("/dashboard");
+    } catch (error) {
+      throw error;
+    }
   };
 
   // 3. Fungsi Logout
@@ -50,7 +81,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, token, isLoading, login, register, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

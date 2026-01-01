@@ -15,10 +15,7 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* Custom Date Picker (Visual Only) */}
-        <button className="flex items-center gap-2 bg-white px-4 py-2.5 rounded-full text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 transition-colors">
-          <span>Nov 19, 2023 - Nov 26, 2023</span>
-        </button>
+        {/* AI Suggestion Notification */}
       </div>
 
       {/* 1. Stat Cards Grid */}

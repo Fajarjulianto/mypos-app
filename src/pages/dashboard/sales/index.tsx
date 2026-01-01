@@ -3,7 +3,13 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { ProductCard } from "@/components/features/pos/ProductCard";
 import { CartSection } from "@/components/features/pos/CartSection";
 import { Search } from "lucide-react";
-
+import { CheckoutModal } from "@/components/features/pos/CheckoutModal";
+import { PaymentSuccessModal } from "@/components/features/pos/PaymentSuccesModal";
+import type {
+  PaymentResult,
+  TransactionRecord,
+  TransactionItem,
+} from "@/types/sales";
 // Dummy Data Produk
 const dummyProducts = [
   {
@@ -68,7 +74,45 @@ interface CartItem {
 export default function SalesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [lastTransaction, setLastTransaction] =
+    useState<TransactionRecord | null>(null);
 
+  const calculateTotal = (): number => {
+    return cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+  };
+  const handlePaymentSuccess = (result: PaymentResult) => {
+    // Buat object TransactionRecord lengkap
+    const transactionItems: TransactionItem[] = cart.map((item) => ({
+      name: item.name,
+      qty: item.qty,
+      price: item.price,
+      total: item.price * item.qty,
+      unit: "pcs",
+    }));
+
+    const newTransaction: TransactionRecord = {
+      ...result,
+      id: `TRX-${Date.now()}`,
+      total: calculateTotal(),
+      date: new Date(),
+      items: transactionItems,
+    };
+
+    // Simpan ke state
+    setLastTransaction(newTransaction);
+
+    // Atur visibilitas modal
+    setIsCheckoutOpen(false);
+    setIsSuccessOpen(true);
+  };
+
+  const handleNewOrder = () => {
+    setIsSuccessOpen(false);
+    setLastTransaction(null);
+    setCart([]);
+  };
   // Filter Produk
   const filteredProducts = dummyProducts.filter((p) =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -157,9 +201,20 @@ export default function SalesPage() {
             cart={cart}
             onUpdateQty={handleUpdateQty}
             onRemove={handleRemoveItem}
-            onCheckout={() => alert("Proceeding to payment...")}
+            onCheckout={() => setIsCheckoutOpen(true)}
           />
         </div>
+        <CheckoutModal
+          isOpen={isCheckoutOpen}
+          onClose={() => setIsCheckoutOpen(false)}
+          totalAmount={calculateTotal()}
+          onSuccess={handlePaymentSuccess}
+        />
+        <PaymentSuccessModal
+          isOpen={isSuccessOpen}
+          onClose={handleNewOrder}
+          transactionData={lastTransaction}
+        />
       </div>
     </DashboardLayout>
   );

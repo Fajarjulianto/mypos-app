@@ -3,7 +3,7 @@ import { Button } from "@/components/common/ui/button";
 import { Input } from "@/components/common/ui/input";
 import { Label } from "@/components/common/ui/label";
 import { Checkbox } from "@/components/common/ui/checkbox";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
@@ -11,20 +11,22 @@ import { useState } from "react";
 const LoginPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleLogin = async ({ post }: { post: string }) => {
-    const res = await post("/login", { email, password });
-
-    const token = "abc-124-456-token-jwt";
-    const dummyUser = {
-      id: 1,
-      name: "admin MYPOS",
-      email: "admin@mypos.com",
-      role: "admin",
-    };
-    login(token, dummyUser);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      await login(formData);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -59,7 +61,6 @@ const LoginPage = () => {
         </div>
 
         {/* 3. Dashboard Mockup Image (CSS Only implementation) */}
-        {/* Saya posisikan absolute di bawah agar terpotong seperti di foto referensi */}
         <div className="absolute -bottom-[15%] -right-[10%] w-[90%] aspect-video bg-[#1a1a1a] rounded-tl-2xl border-t-4 border-l-4 border-white/10 shadow-2xl p-4 overflow-hidden">
           {/* Mockup Header */}
           <div className="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
@@ -95,22 +96,24 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* --- SISI KANAN (FORM LOGIN) --- 
-          Menggunakan flex center agar form berada di tengah container kanan
-      */}
+      {/* --- LOGIN Form --- */}
       <div className="flex items-center justify-center bg-white p-8">
-        {/* CONTAINER FORM: Dibatasi max-w-[420px] agar tidak lebar merata kanan kiri */}
         <div className="w-full max-w-105 space-y-7">
           {/* Header Form */}
           <div className="space-y-1.5">
             <h1 className="text-4xl font-bold tracking-tight text-slate-900">
               Log in
             </h1>
-            {/* Opsional: Subtext jika butuh */}
+            {/* Subtext  */}
           </div>
-
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg flex items-center gap-2 text-red-600 text-sm">
+              <AlertCircle className="h-4 w-4" />
+              <span>{error}</span>
+            </div>
+          )}
           {/* Form Inputs */}
-          <div className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {/* Email Field */}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-slate-600 font-medium">
@@ -119,6 +122,10 @@ const LoginPage = () => {
               <div className="relative group">
                 <Mail className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <Input
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   id="email"
                   placeholder="your@email.com"
                   type="email"
@@ -135,6 +142,10 @@ const LoginPage = () => {
               <div className="relative group">
                 <Lock className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <Input
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   id="password"
                   placeholder="••••••••••••"
                   type={showPassword ? "text" : "password"}
@@ -151,6 +162,14 @@ const LoginPage = () => {
                     <Eye className="h-5 w-5" />
                   )}
                 </button>
+              </div>
+              <div className="flex justify-end mt-1">
+                <Link
+                  href="/forgot-password"
+                  className="text-xs font-medium text-blue-600 hover:underline"
+                >
+                  Lupa password?
+                </Link>
               </div>
             </div>
 
@@ -172,10 +191,15 @@ const LoginPage = () => {
 
             {/* Main Action Button */}
             <Button
-              onClick={handleLogin}
+              type="submit"
+              disabled={isLoading}
               className="w-full h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all"
             >
-              Sign In
+              {isLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                "Login"
+              )}
             </Button>
 
             {/* Register Link */}
@@ -188,7 +212,7 @@ const LoginPage = () => {
                 Sign up
               </Link>
             </div>
-          </div>
+          </form>
 
           {/* Divider "OR" */}
           <div className="relative py-2">

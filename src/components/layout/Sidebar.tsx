@@ -9,7 +9,8 @@ import {
   Settings,
   Package2,
   X,
-  LogOut, // Import Icon Logout
+  LogOut,
+  Store,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -18,6 +19,7 @@ const sidebarItems = [
   { icon: Package, label: "Inventory", href: "/dashboard/inventory" },
   { icon: Wallet, label: "Keuangan", href: "/dashboard/finance" },
   { icon: BarChart3, label: "Laporan", href: "/dashboard/reports" },
+  { icon: Store, label: "Marketplace", href: "/dashboard/marketplace" },
 ];
 
 interface SidebarProps {

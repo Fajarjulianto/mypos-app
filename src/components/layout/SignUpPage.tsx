@@ -1,13 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/common/ui/button";
 import { Input } from "@/components/common/ui/input";
 import { Label } from "@/components/common/ui/label";
 import { Checkbox } from "@/components/common/ui/checkbox";
-import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  User,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { register } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+    try {
+      await register(formData);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     // GRID LAYOUT: Sama persis dengan Login Page (1.3fr : 1fr)
@@ -84,9 +116,13 @@ const SignUpPage = () => {
               Enter your details to get started.
             </p>
           </div>
-
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg flex gap-2">
+              <AlertCircle className="h-4 w-4 mt-0.5" /> {error}
+            </div>
+          )}
           {/* Form Inputs */}
-          <div className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {/* 1. Full Name Field (Baru) */}
             <div className="space-y-2">
               <Label htmlFor="fullname" className="text-slate-600 font-medium">
@@ -95,6 +131,10 @@ const SignUpPage = () => {
               <div className="relative group">
                 <User className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <Input
+                  value={formData.fullName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
                   id="fullname"
                   placeholder="John Doe"
                   type="text"
@@ -111,6 +151,10 @@ const SignUpPage = () => {
               <div className="relative group">
                 <Mail className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <Input
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   id="email"
                   placeholder="name@example.com"
                   type="email"
@@ -127,6 +171,10 @@ const SignUpPage = () => {
               <div className="relative group">
                 <Lock className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <Input
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   id="password"
                   placeholder="Create a password"
                   type={showPassword ? "text" : "password"}
@@ -168,8 +216,16 @@ const SignUpPage = () => {
             </div>
 
             {/* Main Action Button */}
-            <Button className="w-full h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all">
-              Create account
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all"
+            >
+              {isLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                "Create Account"
+              )}
             </Button>
 
             {/* Login Link */}
@@ -182,7 +238,7 @@ const SignUpPage = () => {
                 Log in
               </Link>
             </div>
-          </div>
+          </form>
 
           {/* Divider */}
           <div className="relative py-2">
