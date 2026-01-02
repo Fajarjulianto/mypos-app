@@ -1,30 +1,15 @@
-import { LoginPayload, RegisterPayload, AuthContextType } from "@/types/auth"; // Sesuaikan path
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+import { LoginPayload, RegisterPayload, AuthContextType } from "@/types/auth";
+import axiosClient from "@/lib/axiosClient";
 
 export const authService = {
   async login(payload: LoginPayload): Promise<AuthContextType> {
-    const res = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Login failed");
-    return data;
+    const response = await axiosClient.post("/Auth/login", payload);
+    return response.data;
   },
 
   async register(payload: RegisterPayload): Promise<AuthContextType> {
-    const res = await fetch(`${API_URL}/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Registration failed");
-    return data;
+    const response = await axiosClient.post("/Auth/register", payload);
+    return response.data;
   },
 
   logout() {
