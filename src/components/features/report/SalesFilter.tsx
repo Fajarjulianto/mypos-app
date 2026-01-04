@@ -14,7 +14,7 @@ export const SalesFilter = ({ onSearch, onExport }: SalesFilterProps) => {
     <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm mb-6">
       {/* Header Title */}
       <div className="flex items-center gap-2 mb-6">
-        <div className="p-2 bg-green-50 rounded-lg text-green-600">
+        <div className="p-2 bg-green-50 rounded-lg text-blue-600">
           <FileText className="h-5 w-5" />
         </div>
         <h2 className="text-lg font-bold text-gray-900">Sales Report</h2>
@@ -58,7 +58,7 @@ export const SalesFilter = ({ onSearch, onExport }: SalesFilterProps) => {
         <div className="flex items-center gap-3 w-full lg:w-auto mt-4 lg:mt-0">
           <button
             onClick={() => onSearch(startDate, endDate)}
-            className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-xl text-sm font-bold hover:bg-green-700 transition-all shadow-lg shadow-green-600/20 active:scale-95"
+            className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-green-600/20 active:scale-95"
           >
             <Search className="h-4 w-4" />
             <span>Search</span>

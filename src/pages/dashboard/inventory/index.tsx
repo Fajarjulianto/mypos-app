@@ -5,9 +5,26 @@ import { Plus, Sparkles } from "lucide-react";
 import { AddProductForm } from "@/components/features/inventory/AddProductForm";
 import { useState } from "react";
 import { AiScanModal } from "@/components/features/inventory/AiScanModal";
+import { useScanStore } from "@/stores/useScanStore";
+import { toast } from "sonner";
+import { useInventoryStore } from "@/stores/useInventoryStore";
+import { ScannedItem } from "@/types/aiScanService";
+
 export default function InventoryPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const openScanModal = useScanStore((state) => state.openModal);
+  const { addBatchFromScan } = useInventoryStore();
+
+  const handleScanSave = (scannedItems: ScannedItem[]) => {
+    if (scannedItems.length === 0) return;
+
+    addBatchFromScan(scannedItems);
+
+    toast.success("Inventory Updated!", {
+      description: `${scannedItems.length} jenis barang telah diproses.`,
+    });
+  };
+
   return (
     <DashboardLayout>
       {/* Page Header */}
@@ -25,7 +42,7 @@ export default function InventoryPage() {
         <div className="flex items-center gap-3">
           {/* AI Scan Button */}
           <button
-            onClick={() => setIsAiModalOpen(true)}
+            onClick={openScanModal}
             className="flex items-center gap-2 px-4 py-2.5 bg-white border border-primary text-primary rounded-xl text-sm font-semibold hover:bg-primary/5 transition-all shadow-sm"
           >
             <Sparkles className="h-4 w-4" />
@@ -48,11 +65,7 @@ export default function InventoryPage() {
       {/*  Main Table */}
       <InventoryTable />
 
-      {isAiModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-opacity duration-300 animate-in fade-in">
-          <AiScanModal onClose={() => setIsAiModalOpen(false)} />
-        </div>
-      )}
+      <AiScanModal onSave={handleScanSave} />
 
       {isAddModalOpen && (
         // Overlay Gelap (Backdrop)
