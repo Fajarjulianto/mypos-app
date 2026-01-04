@@ -7,7 +7,7 @@ import { useState } from "react";
 import { AiScanModal } from "@/components/features/inventory/AiScanModal";
 import { useScanStore } from "@/stores/useScanStore";
 import { toast } from "sonner";
-import { useInventoryStore } from "@/stores/useInventoryStore";
+import { useInventoryStore } from "@/stores/useAiInventoryStore";
 import { ScannedItem } from "@/types/aiScanService";
 
 export default function InventoryPage() {
