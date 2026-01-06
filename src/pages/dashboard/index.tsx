@@ -2,8 +2,32 @@ import { RevenueChart } from "@/components/dashboard/revenueChart";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { DollarSign, ShoppingBag, CreditCard, Package } from "lucide-react";
+import {
+  SalesByCategoryChart,
+  CategoryData,
+} from "@/components/dashboard/BestSellingChart";
 
 export default function DashboardPage() {
+  const mockBestSellers: CategoryData[] = [
+    {
+      id: "prod-1",
+      name: "Kopi Susu Gula Aren",
+      value: 150,
+      color: "#16a34a", // Green-600
+    },
+    {
+      id: "prod-3",
+      name: "Amin Rice",
+      value: 50,
+      color: "#f59e0b", // Amber-500
+    },
+    {
+      id: "prod-4",
+      name: "Sugar",
+      value: 450,
+      color: "#9333ea", // Purple-600
+    },
+  ];
   return (
     <DashboardLayout>
       {/* Page Title & Actions */}
@@ -66,13 +90,9 @@ export default function DashboardPage() {
           <RevenueChart />
         </div>
 
-        {/* CHART KECIL (Payment Method - Placeholder) */}
-        <div className="md:col-span-1 bg-white p-6 rounded-2xl shadow-sm min-h-200">
-          <h3 className="font-bold text-gray-900 mb-4">Payment Method</h3>
-          <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-            [Area untuk Grafik Donat]
-          </div>
-        </div>
+        {/* PIE CHART */}
+
+        <SalesByCategoryChart data={mockBestSellers} />
       </div>
 
       {/* 3. Table Section Placeholder */}
