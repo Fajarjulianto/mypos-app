@@ -6,7 +6,8 @@ import {
   SalesByCategoryChart,
   CategoryData,
 } from "@/components/dashboard/BestSellingChart";
-
+import { AiSuggestionCard } from "@/components/ui/AiSuggestionCard";
+import { AiSuggestion } from "@/types/ai";
 export default function DashboardPage() {
   const mockBestSellers: CategoryData[] = [
     {
@@ -28,6 +29,18 @@ export default function DashboardPage() {
       color: "#9333ea", // Purple-600
     },
   ];
+
+  const productSuggestion: AiSuggestion = {
+    id: "sugg-1",
+    summary: "Analisis Tren: Permintaan 'Kopi Gula Aren' meningkat 40%.",
+    details: [
+      "Stok susu cair menipis, disarankan restock 20% lebih banyak.",
+      "Kompetitor di area sekitar menurunkan harga sebesar Rp 2.000.",
+      "Waktu terbaik untuk membuat promo flash sale adalah jam 13:00 - 15:00.",
+    ],
+    actionLabel: "Terapkan Strategi Ini",
+  };
+
   return (
     <DashboardLayout>
       {/* Page Title & Actions */}
@@ -40,6 +53,10 @@ export default function DashboardPage() {
         </div>
 
         {/* AI Suggestion Notification */}
+        <AiSuggestionCard
+          suggestion={productSuggestion}
+          onAccept={() => alert("Strategi diterapkan!")}
+        />
       </div>
 
       {/* 1. Stat Cards Grid */}
