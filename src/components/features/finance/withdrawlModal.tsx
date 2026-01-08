@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { X, ArrowUpRight, AlertCircle, Landmark } from "lucide-react";
 
+export interface WithdrawalBankData {
+  bankName: string;
+  accountNumber: string;
+}
+
 interface WithdrawModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentBalance: number; // Untuk validasi
-  onConfirm: (amount: number, bankData: any) => void;
+  onConfirm: (amount: number, bankData: WithdrawalBankData) => void;
 }
 
 export const WithdrawModal = ({
