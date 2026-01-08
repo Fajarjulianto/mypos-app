@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useCustomerStore } from "@/stores/useCustomerStore";
 
-// Import komponen yang sudah Anda punya
+import { formatRupiah } from "@/utils/format";
 import { AiSuggestionCard } from "@/components/ui/AiSuggestionCard";
 import { AiSuggestion } from "@/types/ai";
 
@@ -20,14 +20,6 @@ export default function CustomerPage() {
     useCustomerStore();
 
   const filteredData = getFilteredCustomers();
-
-  // Helper: Format Rupiah
-  const formatRupiah = (amount: number) =>
-    new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-    }).format(amount);
 
   // Mock AI Data untuk Customer
   const customerAiSuggestion: AiSuggestion = {
