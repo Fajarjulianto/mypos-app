@@ -90,7 +90,7 @@ export const WithdrawModal = ({
                 className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 outline-none font-bold text-lg transition-all ${
                   isOverBalance
                     ? "border-red-300 focus:ring-red-200 text-red-600"
-                    : "border-gray-300 focus:ring-green-500"
+                    : "border-gray-300 focus:ring-blue-500"
                 }`}
                 placeholder="0"
               />
@@ -123,7 +123,7 @@ export const WithdrawModal = ({
               <select
                 value={bankName}
                 onChange={(e) => setBankName(e.target.value)}
-                className="w-1/3 p-3 border border-gray-300 rounded-xl bg-white font-semibold text-gray-700 outline-none focus:border-green-500"
+                className="w-1/3 p-3 border border-gray-300 rounded-xl bg-white font-semibold text-gray-700 outline-none focus:border-blue-500"
               >
                 <option value="BCA">BCA</option>
                 <option value="Mandiri">Mandiri</option>
@@ -135,7 +135,7 @@ export const WithdrawModal = ({
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value)}
                 placeholder="Nomor Rekening"
-                className="flex-1 p-3 border border-gray-300 rounded-xl font-semibold outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
+                className="flex-1 p-3 border border-gray-300 rounded-xl font-semibold outline-none focus:border-blue-500 focus:ring-2 focus:ring-green-100"
               />
             </div>
             <div className="flex items-start gap-2 p-3 bg-blue-50 text-blue-700 rounded-xl text-xs">

@@ -49,7 +49,7 @@ export const TopUpModal = ({ isOpen, onClose, onConfirm }: TopUpModalProps) => {
         {/* Header */}
         <div className="px-6 py-4 border-b flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-3xl">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-green-100 text-green-600 rounded-lg">
+            <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
               <ArrowRight className="rotate-90" size={20} />
             </div>
             <h2 className="text-xl font-bold text-gray-900">Top Up Wallet</h2>
@@ -78,7 +78,7 @@ export const TopUpModal = ({ isOpen, onClose, onConfirm }: TopUpModalProps) => {
                 value={amount}
                 onChange={handleAmountChange}
                 placeholder="0"
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 outline-none font-bold text-lg"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-lg"
               />
             </div>
 
@@ -90,8 +90,8 @@ export const TopUpModal = ({ isOpen, onClose, onConfirm }: TopUpModalProps) => {
                   onClick={() => setAmount(preset)}
                   className={`py-2 px-1 rounded-lg text-xs font-semibold border transition-all ${
                     amount === preset
-                      ? "bg-green-600 text-white border-green-600"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-green-400"
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-blue-400"
                   }`}
                 >
                   {preset.toLocaleString("id-ID")}
@@ -112,8 +112,8 @@ export const TopUpModal = ({ isOpen, onClose, onConfirm }: TopUpModalProps) => {
                   onClick={() => setSelectedMethod(method.id)}
                   className={`flex items-center justify-between p-3 border rounded-xl cursor-pointer transition-all ${
                     selectedMethod === method.id
-                      ? "border-green-600 bg-green-50 shadow-sm"
-                      : "border-gray-200 hover:border-green-300"
+                      ? "border-blue-600 bg-blue-50 shadow-sm"
+                      : "border-gray-200 hover:border-blue-300"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -132,12 +132,12 @@ export const TopUpModal = ({ isOpen, onClose, onConfirm }: TopUpModalProps) => {
                   <div
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                       selectedMethod === method.id
-                        ? "border-green-600"
+                        ? "border-blue-600"
                         : "border-gray-300"
                     }`}
                   >
                     {selectedMethod === method.id && (
-                      <div className="w-2.5 h-2.5 bg-green-600 rounded-full" />
+                      <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
                     )}
                   </div>
                 </div>
@@ -151,7 +151,7 @@ export const TopUpModal = ({ isOpen, onClose, onConfirm }: TopUpModalProps) => {
           <button
             onClick={handleSubmit}
             disabled={!amount || !selectedMethod}
-            className="w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-green-600/20 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-green-600/20 transition-all flex items-center justify-center gap-2"
           >
             <Wallet size={18} />
             Bayar Sekarang

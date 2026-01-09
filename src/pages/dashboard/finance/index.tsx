@@ -4,8 +4,13 @@ import { MonthlySummary } from "@/components/features/finance/MonthlySummary";
 import { TransactionList } from "@/components/features/finance/TransactionList";
 import { Transaction, FinanceSummary } from "@/types/finance";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import { WithdrawModal } from "@/components/features/finance/withdrawlModal";
+import { TopUpModal } from "@/components/features/finance/topUpModal";
 
 export default function FinancePage() {
+  const [isTopUpOpen, setIsTopUpOpen] = useState(false);
+  const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+
   const [summary] = useState<FinanceSummary>({
     balance: 15234500,
     available: 11734500,
@@ -45,13 +50,11 @@ export default function FinancePage() {
   ]);
 
   const handleTopUp = () => {
-    alert("Open Top Up Modal");
-    // Logika buka modal topup
+    alert("Top Up Succesfull");
   };
 
   const handleWithdraw = () => {
-    alert("Open Withdraw Modal");
-    // Logika buka modal withdraw
+    alert("Withdrawl Succesfull");
   };
 
   return (
@@ -69,8 +72,8 @@ export default function FinancePage() {
             <WalletCard
               balance={summary.balance}
               available={summary.available}
-              onTopUp={handleTopUp}
-              onWithdraw={handleWithdraw}
+              onTopUp={() => setIsTopUpOpen(true)}
+              onWithdraw={() => setIsWithdrawOpen(true)}
             />
           </div>
 
@@ -86,6 +89,18 @@ export default function FinancePage() {
 
         {/* Bottom Section: History */}
         <TransactionList transactions={transactions} />
+
+        <TopUpModal
+          isOpen={isTopUpOpen}
+          onClose={() => setIsTopUpOpen(false)}
+          onConfirm={handleTopUp}
+        />
+        <WithdrawModal
+          isOpen={isWithdrawOpen}
+          onClose={() => setIsWithdrawOpen(false)}
+          currentBalance={summary.available} // Pass saldo tersedia untuk validasi
+          onConfirm={handleWithdraw}
+        />
       </div>
     </DashboardLayout>
   );
