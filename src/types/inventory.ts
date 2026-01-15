@@ -5,9 +5,13 @@ export interface InventoryItem {
   category: string;
   stock: number;
   price: number;
+  imageUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-export interface InventoryResponse {
-  data: InventoryItem[];
+export interface ApiResponse<T> {
+  data: T;
   message?: string;
+  status?: number;
 }

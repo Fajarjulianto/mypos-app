@@ -1,31 +1,46 @@
-import { InventoryItem, InventoryResponse } from "@/types/inventory";
-
-const API_URL = "http://localhost:3000/api/Products";
+import axiosClient from "@/lib/axiosClient";
+import { InventoryItem, ApiResponse } from "@/types/inventory";
+import { AxiosError } from "axios";
 
 export const inventoryService = {
   getAll: async (): Promise<InventoryItem[]> => {
     try {
-      const response = await fetch(API_URL, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          //   "Authorization": `Bearer ${token}`
-        },
-      });
+      const response = await axiosClient.get<ApiResponse<InventoryItem[]>>(
+        "/Products"
+      );
 
-      if (!response.ok) {
+      return response.data.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(
-          `Error ${response.status}: Gagal mengambil data inventory`
+          error.response?.data?.message || "Gagal mengambil data"
         );
       }
+      throw error;
+    }
+  },
 
-      const result: InventoryResponse = await response.json();
-
-      // Asumsi response backend { data: [...] }
-      // Jika backend langsung return array [...], ganti jadi return result;
-      return result.data;
+  getById: async (id: string): Promise<InventoryItem> => {
+    try {
+      const response = await axiosClient.get<ApiResponse<InventoryItem>>(
+        `/Products/${id}`
+      );
+      return response.data.data;
     } catch (error) {
-      console.error("Fetch Inventory Error:", error);
+      throw error;
+    }
+  },
+
+  create: async (formData: FormData): Promise<boolean> => {
+    try {
+      const response = await axiosClient.post<ApiResponse<InventoryItem>>(
+        "/product/add-product",
+        formData
+      );
+      return response.status === 200 || response.status === 201;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data?.message);
       throw error;
     }
   },
